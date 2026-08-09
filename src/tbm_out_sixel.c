@@ -11,79 +11,16 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct {
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-} palette_t;
-
-static const palette_t palette_2[2] = {
-  {0, 0, 0},
-  {100, 100, 100},
-};
-
-static const palette_t palette_4[4] = {
-  {0, 0, 0},
-  {100, 0, 0},
-  {100, 100, 0},
-  {100, 100, 100},
-};
-
-static const palette_t palette_8[8] = {
-  {0, 0, 0},
-  {100, 0, 0},
-  {0, 100, 0},
-  {100, 100, 0},
-  {0, 0, 100},
-  {100, 0, 100},
-  {0, 100, 100},
-  {100, 100, 100},
-};
-
-static const palette_t palette_16[16] = {
-  {0, 0, 0},
-  {50, 0, 0},
-  {0, 50, 0},
-  {50, 25, 0},
-  {0, 0, 50},
-  {50, 0, 50},
-  {0, 50, 50},
-  {50, 50, 50},
-  {25, 25, 25},
-  {100, 0, 0},
-  {0, 100, 0},
-  {100, 100, 0},
-  {0, 0, 100},
-  {100, 0, 100},
-  {0, 100, 100},
-  {100, 100, 100},
-};
-
-
 void redraw_sixel(tbm_bitmap_t* bms)
 {
-  const palette_t *pl;
+  const palette_t *pl = bms->palette;
   unsigned int i,x,y;
   uint8_t c;
-  switch(bms->ncolors) {
-  case 2:
-    pl = palette_2;
-    break;
-  case 4:
-    pl = palette_4;
-    break;
-  case 8:
-    pl = palette_8;
-    break;
-  default:
-    pl = palette_16;
-    break;
-  }
   printf("\033[%d;%dH",bms->posy+1,bms->posx+1); // Position cursor to start graphics
   printf("\033Pq"); // Enter sixel mode
   // Write out the colors of the palette.
   for (i=0; i<bms->ncolors; i++) {
-    printf("#%d;2;%d;%d;%d",i,pl[i].r,pl[i].g,pl[i].b);
+    printf("#%d;2;%d;%d;%d",i,pl[i].r*100/255,pl[i].g*100/255,pl[i].b*100/255);
   }
   for (y=0; y<bms->height; y+=6) {
     for (i=0; i<bms->ncolors; i++) {

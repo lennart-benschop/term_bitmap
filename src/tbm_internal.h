@@ -5,6 +5,12 @@
 */
 
 typedef struct {
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+} palette_t;
+
+typedef struct {
   unsigned int width;
   unsigned int height;
   unsigned int posx;
@@ -15,7 +21,10 @@ typedef struct {
   int cur_x, cur_y;
   unsigned int fgcolor, bgcolor;
   unsigned int fgmode, bgmode;
+  const palette_t *palette;
 } tbm_bitmap_t;
+
+void set_palette(tbm_bitmap_t* bm, unsigned int ncolors);
 
 void redraw_sixel(tbm_bitmap_t* bm);
 

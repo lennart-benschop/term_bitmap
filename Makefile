@@ -4,7 +4,7 @@ default: lib tests
 
 lib: libtbm.a
 
-libtbm.a: src/tbm_main.o src/tbm_plot.o src/tbm_text.o src/tbm_out_sixel.o src/tbm_out_kitty.o src/tbm_out_octant.o src/tbm_out_sextant.o src/tbm_out_braille.o src/tbm_out_fb.o src/tbm_probe.o
+libtbm.a: src/tbm_main.o src/tbm_plot.o src/tbm_text.o src/tbm_out_sixel.o src/tbm_out_kitty.o src/tbm_out_octant.o src/tbm_out_sextant.o src/tbm_out_braille.o src/tbm_out_fb.o src/tbm_probe.o src/tbm_palette.o
 	$(AR) r $@ src/*.o
 	ranlib libtbm.a
 

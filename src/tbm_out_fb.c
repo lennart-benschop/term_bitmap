@@ -16,53 +16,6 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
-typedef struct {
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-} palette_t;
-
-static const palette_t palette_2[2] = {
-  {0, 0, 0},
-  {255, 255, 255},
-};
-
-static const palette_t palette_4[4] = {
-  {0, 0, 0},
-  {255, 0, 0},
-  {255, 255, 0},
-  {255, 255, 255},
-};
-
-static const palette_t palette_8[8] = {
-  {0, 0, 0},
-  {255, 0, 0},
-  {0, 255, 0},
-  {255, 255, 0},
-  {0, 0, 255},
-  {255, 0, 255},
-  {0, 255, 255},
-  {255, 255, 255},
-};
-
-static const palette_t palette_16[16] = {
-  {0, 0, 0},
-  {128, 0, 0},
-  {0, 128, 0},
-  {128, 64, 0},
-  {0, 0, 128},
-  {128, 0, 128},
-  {0, 128, 128},
-  {128, 128, 128},
-  {64, 64, 64},
-  {255, 0, 0},
-  {0, 255, 0},
-  {255, 255, 0},
-  {0, 0, 255},
-  {255, 0, 255},
-  {0, 255, 255},
-  {255, 255, 255},
-};
 
 void redraw_fb(tbm_bitmap_t* bms)
 {
@@ -71,7 +24,7 @@ void redraw_fb(tbm_bitmap_t* bms)
   static uint32_t *mapped_fb;
   static unsigned int line_length,fb_len;
   static struct fb_var_screeninfo fbi; 
-  const palette_t *pl;
+  const palette_t *pl = bms->palette;
   unsigned int x,y;
   unsigned int startx=bms->posx*8;
   unsigned int starty=bms->posy*16;
@@ -104,20 +57,6 @@ void redraw_fb(tbm_bitmap_t* bms)
   if (startx + bms->width > fbi.xres || starty + bms->height > fbi.yres) {
     perror("Bitmap does not fit on screen\n");
     return;
-  }
-  switch(bms->ncolors) {
-  case 2:
-    pl = palette_2;
-    break;
-  case 4:
-    pl = palette_4;
-    break;
-  case 8:
-    pl = palette_8;
-    break;
-  default:
-    pl = palette_16;
-    break;
   }
   printf("\033[%d;%dHa\n",bms->posy+1,bms->posx+1); // Do some fb output
   printf("\033[%d;%dH",bms->posy+1+(bms->height+15)/16,1); // Position on line just after graphics bitmap.

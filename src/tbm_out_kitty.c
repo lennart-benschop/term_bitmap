@@ -11,53 +11,6 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct {
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-} palette_t;
-
-static const palette_t palette_2[2] = {
-  {0, 0, 0},
-  {255, 255, 255},
-};
-
-static const palette_t palette_4[4] = {
-  {0, 0, 0},
-  {255, 0, 0},
-  {255, 255, 0},
-  {255, 255, 255},
-};
-
-static const palette_t palette_8[8] = {
-  {0, 0, 0},
-  {255, 0, 0},
-  {0, 255, 0},
-  {255, 255, 0},
-  {0, 0, 255},
-  {255, 0, 255},
-  {0, 255, 255},
-  {255, 255, 255},
-};
-
-static const palette_t palette_16[16] = {
-  {0, 0, 0},
-  {128, 0, 0},
-  {0, 128, 0},
-  {128, 64, 0},
-  {0, 0, 128},
-  {128, 0, 128},
-  {0, 128, 128},
-  {128, 128, 128},
-  {64, 64, 64},
-  {255, 0, 0},
-  {0, 255, 0},
-  {255, 255, 0},
-  {0, 0, 255},
-  {255, 0, 255},
-  {0, 255, 255},
-  {255, 255, 255},
-};
 
 static const char base64_chars[] =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -67,23 +20,9 @@ static const char base64_chars[] =
 
 void redraw_kitty(tbm_bitmap_t* bms)
 {
-  const palette_t *pl;
+  const palette_t *pl = bms->palette;
   unsigned int x,y;
   unsigned int npix=0;
-  switch(bms->ncolors) {
-  case 2:
-    pl = palette_2;
-    break;
-  case 4:
-    pl = palette_4;
-    break;
-  case 8:
-    pl = palette_8;
-    break;
-  default:
-    pl = palette_16;
-    break;
-  }
   printf("\033[%d;%dH",bms->posy+1,bms->posx+1); // Position cursor to start graphics
   //printf("\033_Ga=d;\033\\"); /* Delete the previous image */
   printf("\033_Gf=24,s=%d,v=%d,a=T,m=1;",bms->width,bms->height); // Put terminal in Kitty graphics mode.
