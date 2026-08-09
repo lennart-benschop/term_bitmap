@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
 #include "term_bitmap.h"
 
 static int randint(int max)
@@ -25,6 +26,8 @@ int main(void)
   bm = tbm_new_screen(width,height,0,0,ncolors,mode);
   if (!bm) return -1;
 
+  printf("\033[2J\n"); // Clear the screen first
+  usleep(100000);
   tbm_moveto(bm,0,0);
   tbm_lineto(bm,width-1,height-1);
 
@@ -32,6 +35,8 @@ int main(void)
   tbm_lineto(bm,0,height-1);
 
   tbm_redraw(bm);
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
 
   tbm_moveto(bm,width-1,0);
   tbm_lineto(bm,width-20,height-1);
@@ -109,6 +114,64 @@ int main(void)
   printf("Press ENTER to continue\n");
   while(getchar()!='\n');
 
+  // Couple of triangles
+  tbm_clear(bm);
+  {
+    tbm_setfg(bm,9);
+    tbm_moveto(bm,0,0);
+    tbm_triangle(bm,0,height-1,width-1,height-1);
+    tbm_setfg(bm,13);
+    tbm_moveto(bm,width-1,0);
+    tbm_triangle(bm,width*3/4,0,width-1,height*3/4);
+    tbm_setfg(bm,11);
+    tbm_moveto(bm,width*3/4,height/8);
+    tbm_triangle(bm,width*7/8,height/4,width*3/4,height*3/8);
+    tbm_redraw(bm);
+  }
+  
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
+  // Random triangles
+  tbm_clear(bm);
+  {
+    int x1,x2,y1,y2,x3,y3,i,c;
+    for (i=0;i<20;i++) {
+      c=randint(ncolors-1)+1;
+      tbm_setpen(bm,c,0,DRAW_MODE_FG,DRAW_MODE_BG);
+      x1 = randint(width);
+      x2 = randint(width);
+      x3 = randint(width);
+      y1 = randint(height);
+      y2 = randint(height);
+      y3 = randint(height);
+      tbm_moveto(bm,x1,y1);
+      tbm_triangle(bm,x2,y2,x3,y3);
+    }
+    tbm_redraw(bm);
+  }
+  
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
+
+  // Random circles
+  tbm_clear(bm);
+  {
+    int i,x,y,r,c,f;
+    for (i=0;i<20;i++) {
+      x=randint(width);
+      y=randint(height);
+      r=randint(height/4)+1;
+      f=randint(2);
+      c=randint(ncolors-1)+1;
+      tbm_setpen(bm,c,0,DRAW_MODE_FG,DRAW_MODE_BG);
+      tbm_circle(bm,x,y,r,f);
+    }
+    tbm_redraw(bm);
+  }
+  
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
+
   tbm_clear(bm);
   // Lissajous figure 
   {
@@ -138,8 +201,10 @@ int main(void)
 	tbm_moveto(bm, i, 0);
 	tbm_lineto(bm, j, height-1);
       }
+      usleep(20000);
       tbm_redraw(bm);
     }
+    tbm_redraw(bm);
   }
   
   printf("Press ENTER to continue\n");

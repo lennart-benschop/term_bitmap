@@ -86,12 +86,12 @@ void redraw_fb(tbm_bitmap_t* bms)
       close(fd);
       return;
     }
-    if (fbi.bits_per_pixel != 32) {
-      perror("Only support 32 bits per pixel\n");
+    if (fbi.bits_per_pixel != 16 && fbi.bits_per_pixel != 32) {
+      perror("Only support 32 or 16 bits per pixel\n");
       close(fd);
       return;
     }
-    fb_len = fbi.xres*fbi.yres*4;
+    fb_len = fbi.xres*fbi.yres*fbi.bits_per_pixel/8;
     line_length = fbi.xres;
     mapped_fb = (uint32_t*)mmap(NULL, fb_len, PROT_READ|PROT_WRITE,
 								MAP_SHARED, fd, 0);
@@ -119,12 +119,19 @@ void redraw_fb(tbm_bitmap_t* bms)
     pl = palette_16;
     break;
   }
+  printf("\033[%d;%dHa\n",bms->posy+1,bms->posx+1); // Do some fb output
   printf("\033[%d;%dH",bms->posy+1+(bms->height+15)/16,1); // Position on line just after graphics bitmap.
   for (y=0;y<bms->height;y++) {
     for (x=0;x<bms->width;x++) {
       uint8_t c = bms->bitmap[y*bms->width+x];
-      uint32_t pixcol = (pl[c].r << 16) | (pl[c].g << 8)| (pl[c].b);
-      mapped_fb[(starty+y)*line_length + startx + x] = pixcol;
+      if (fbi.bits_per_pixel == 32) {
+	uint32_t pixcol = (pl[c].r << 16) | (pl[c].g << 8)| (pl[c].b);
+	mapped_fb[(starty+y)*line_length + startx + x] = pixcol;
+      } else {
+	uint16_t * mapped_fb16 = (uint16_t*)mapped_fb;
+	uint16_t pixcol = ((pl[c].r>>3) << 11) | ((pl[c].g >> 2) << 5)| (pl[c].b>> 3);
+	mapped_fb16[(starty+y)*line_length + startx + x] = pixcol;	
+      }
     }
   }
   //munmap(mapped_fb, fb_len);

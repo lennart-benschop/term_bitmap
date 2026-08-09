@@ -6,6 +6,7 @@
 
 
 #include <stdint.h>
+#include <stdbool.h>
 
 // The supported bitmap drawing modes.
 
@@ -129,6 +130,14 @@ tbm_setpen(void *bm,
 	   unsigned int fg_mode,
 	   unsigned int bg_mode);
 
+/* tbm_setfg
+
+   Set only foregrond colour.
+ */
+void
+tbm_setfg(void * bm,
+	  unsigned int fg);
+
 /* tbm_clear
 
    Fill the entire bitmap with background colour.
@@ -165,6 +174,22 @@ tbm_getdot(void *bm, int x, int y);
  */
 void
 tbm_lineto(void *bm, int x, int y);
+
+/* tbm_triangle
+
+   Draw a solid triangle between the current position, x2,y2 and x3,y3
+   The new current position will now be x3,y3
+*/
+void
+tbm_triangle(void *bm, int x2, int y2, int x3, int y3);
+
+/* tbm_circle
+
+   Draw a circle with x,y as centre and radius r.
+   Draw the outline (fill=false) or a solid circle (fill=true).
+ */
+void
+tbm_circle(void *bm, int x, int y, unsigned int r, bool fill);
 
 /* tbm_getpos
    Draw a null-terminated text string in the given bitmap.

@@ -126,6 +126,14 @@ tbm_setpen(void *bm,
 }
 
 void
+tbm_setfg(void * bm,
+	  unsigned int fg)
+{
+  tbm_bitmap_t * bms = (tbm_bitmap_t*) bm;
+  bms->fgcolor = (fg < bms->ncolors) ? fg: bms->ncolors-1;
+}
+
+void
 tbm_getparams(void *bm, unsigned int *w, unsigned int *h, unsigned int *c)
 {
   tbm_bitmap_t * bms = (tbm_bitmap_t*) bm;

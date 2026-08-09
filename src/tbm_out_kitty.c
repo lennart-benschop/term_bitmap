@@ -85,6 +85,7 @@ void redraw_kitty(tbm_bitmap_t* bms)
     break;
   }
   printf("\033[%d;%dH",bms->posy+1,bms->posx+1); // Position cursor to start graphics
+  //printf("\033_Ga=d;\033\\"); /* Delete the previous image */
   printf("\033_Gf=24,s=%d,v=%d,a=T,m=1;",bms->width,bms->height); // Put terminal in Kitty graphics mode.
   for (y=0;y<bms->height;y++) {
     for (x=0;x<bms->width;x++) {
