@@ -73,7 +73,7 @@ tbm_new_screen(unsigned int width,
   bms->fgcolor = c - 1;
   bms->fgmode = DRAW_MODE_FG;
   bms->bgmode = DRAW_MODE_INVIS;
-  set_palette(bms,c);
+  set_palette(bms);
   return (void*)bms;
 }
 
