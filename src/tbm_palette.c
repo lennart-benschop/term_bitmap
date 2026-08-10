@@ -49,21 +49,44 @@ static const palette_t palette_16[16] = {
   {255, 255, 255},
 };
 
-void set_palette(tbm_bitmap_t* bm, unsigned int ncolors)
+static palette_t palette_64[64];
+static palette_t palette_256[256];
+
+void set_palette(tbm_bitmap_t* bm)
 {
-  switch(bm->ncolors) {
-  case 2:
-    bm->palette = palette_2;
-    break;
-  case 4:
-    bm->palette = palette_4;
-    break;
-  case 8:
-    bm->palette = palette_8;
-    break;
-  default:
+  unsigned int i;
+  if (palette_256[255].r == 0) {
+    for (i=0; i<256; i++) {
+      palette_256[i].r = (i & 7)*255/7;
+      palette_256[i].g = ((i>>3)& 7)*255/7;
+      palette_256[i].b = ((i>>6)& 3)*255/3;
+    }
+  }
+  if (palette_64[63].r == 0) {
+    for (i=0; i<64; i++) {
+      palette_64[i].r = (i & 3)*255/3;
+      palette_64[i].g = ((i>>2) & 3)*255/3;
+      palette_64[i].b = ((i>>4) & 3)*255/3;
+    }
+  }
+  if(bm->ncolors >= 256) {
+    bm->ncolors = 256;
+    bm->palette = palette_256;
+  } else if(bm->ncolors >= 64){
+    bm->ncolors = 64;
+    bm->palette = palette_64;
+  } else if(bm->ncolors >= 16){
+    bm->ncolors = 16;
     bm->palette = palette_16;
-    break;
+  } else if(bm->ncolors >= 8){
+    bm->ncolors = 8;
+    bm->palette = palette_8;
+  } else if(bm->ncolors >= 4){
+    bm->ncolors = 4;
+    bm->palette = palette_4;
+  } else {
+    bm->ncolors = 2;
+    bm->palette = palette_2;
   }
 }
 

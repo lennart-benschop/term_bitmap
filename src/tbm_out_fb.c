@@ -79,12 +79,4 @@ void redraw_fb(tbm_bitmap_t* bms)
 
 void update_whc_fb(unsigned int *w, unsigned int *h, unsigned int *c)
 {
-  if (*c >=16)
-    *c = 16;
-  else if (*c >= 8)
-    *c = 8;
-  else if (*c >= 4)
-    *c = 4;
-  else 
-    *c = 2;
 }

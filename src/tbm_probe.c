@@ -57,12 +57,12 @@ tbm_get_recommended(unsigned int *width,
   case BITMAP_KITTY:
     *width = 640;
     *height = 384;
-    *ncolors = 16;
+    *ncolors = 256;
     break;
   case BITMAP_FB:
     *width = 640;
     *height = 480;
-    *ncolors = 16;
+    *ncolors = 256;
     break;
   case BITMAP_OCTANT:
     *width = 160;
@@ -79,6 +79,5 @@ tbm_get_recommended(unsigned int *width,
     *height = 96;
     *ncolors = 2;
     break;
-  }
-  
+  } 
 }

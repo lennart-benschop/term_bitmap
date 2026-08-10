@@ -24,7 +24,7 @@ typedef struct {
   const palette_t *palette;
 } tbm_bitmap_t;
 
-void set_palette(tbm_bitmap_t* bm, unsigned int ncolors);
+void set_palette(tbm_bitmap_t* bm);
 
 void redraw_sixel(tbm_bitmap_t* bm);
 

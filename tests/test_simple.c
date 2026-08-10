@@ -23,6 +23,7 @@ int main(void)
   unsigned int mode;
   void *bm;
   tbm_get_recommended(&width, &height, &ncolors, &mode);
+  if (ncolors > 16) ncolors = 16;
   bm = tbm_new_screen(width,height,0,0,ncolors,mode);
   if (!bm) return -1;
 
@@ -211,5 +212,19 @@ int main(void)
   while(getchar()!='\n');
 
   tbm_delete(bm);
+
+  if (ncolors >= 16) {
+    unsigned int i;
+    /* Try 256-colour mode */
+    bm = tbm_new_screen(width,height,0,0,256,mode);
+    for (i=0; i<256; i++) {
+      tbm_setfg(bm,i);
+      tbm_moveto(bm,(i & 15)*40, (i>>4) * 8);
+      tbm_plottext(bm,"ABCD");
+    }
+    tbm_redraw(bm);
+    tbm_delete(bm);
+  }
+  
   return 0;
 }
