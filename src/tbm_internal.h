@@ -22,6 +22,7 @@ typedef struct {
   unsigned int fgcolor, bgcolor;
   unsigned int fgmode, bgmode;
   const palette_t *palette;
+  palette_t small_palette[16];
 } tbm_bitmap_t;
 
 void set_palette(tbm_bitmap_t* bm);

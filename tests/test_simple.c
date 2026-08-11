@@ -223,8 +223,32 @@ int main(void)
       tbm_plottext(bm,"ABCD");
     }
     tbm_redraw(bm);
+    printf("Press ENTER to continue\n");
+    while(getchar()!='\n');
     tbm_delete(bm);
   }
-  
+
+  if (ncolors >= 4) {
+    /* Try 4-colour mode, change palette */
+    bm = tbm_new_screen(width,height,0,0,4,mode);
+    tbm_setfg(bm,1);
+    tbm_moveto(bm,width/20,width/20);
+    tbm_triangle(bm,width/20,width/10,width/10,width/10);
+    tbm_triangle(bm,width/10,width/20,width/20,width/20);
+    tbm_setfg(bm,2);
+    tbm_circle(bm,width/2,height/2,width/10,true);
+    tbm_setfg(bm,3);
+    tbm_moveto(bm,width*3/4,width/10);
+    tbm_triangle(bm,width*5/8,width/5,width*7/8,width/4);
+    tbm_redraw(bm);
+    usleep(500000);
+    tbm_set_palette(bm,1,0,255,255);
+    tbm_set_palette(bm,2,255,0,255);
+    tbm_set_palette(bm,3,0,255,0);
+    tbm_redraw(bm);
+    printf("Press ENTER to continue\n");
+    while(getchar()!='\n');
+    tbm_delete(bm);
+  }
   return 0;
 }

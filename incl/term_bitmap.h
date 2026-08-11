@@ -241,3 +241,27 @@ tbm_get_recommended(unsigned int *width,
 		    unsigned int *height,
 		    unsigned int *ncolors,
 		    unsigned int *mode);
+
+
+/* tbm_set_palette
+
+   Change colour index i in the palette of the indicated screen.
+   Only works if number of columns is 16 or less
+*/
+void
+tbm_set_palette(void *bm,
+		unsigned int i,
+		unsigned int r,
+		unsigned int g,
+		unsigned int b);
+
+/* tbm_get_palette
+
+   Get palette endry at index i in the palette of the indicated screen.
+*/
+void
+tbm_get_palette(void *bm,
+		unsigned int i,
+		unsigned int *r,
+		unsigned int *g,
+		unsigned int *b);

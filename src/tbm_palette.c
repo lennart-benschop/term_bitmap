@@ -6,6 +6,7 @@
 
 #include "term_bitmap.h"
 #include "tbm_internal.h"
+#include <string.h>
 
 static const palette_t palette_2[2] = {
   {0, 0, 0},
@@ -77,16 +78,54 @@ void set_palette(tbm_bitmap_t* bm)
     bm->palette = palette_64;
   } else if(bm->ncolors >= 16){
     bm->ncolors = 16;
-    bm->palette = palette_16;
+    bm->palette = bm->small_palette;
+    memcpy(bm->small_palette,palette_16, sizeof(palette_16));
   } else if(bm->ncolors >= 8){
     bm->ncolors = 8;
-    bm->palette = palette_8;
+    bm->palette = bm->small_palette;
+    memcpy(bm->small_palette,palette_8, sizeof(palette_8));
   } else if(bm->ncolors >= 4){
     bm->ncolors = 4;
-    bm->palette = palette_4;
+    bm->palette = bm->small_palette;
+    memcpy(bm->small_palette,palette_4, sizeof(palette_4));
   } else {
     bm->ncolors = 2;
-    bm->palette = palette_2;
+    bm->palette = bm->small_palette;
+    memcpy(bm->small_palette,palette_2, sizeof(palette_2));
   }
 }
 
+/* tbm_set_palette
+
+   Change colour index i in the palette of the indicated screen.
+   Only works if number of columns is 16 or less
+*/
+void
+tbm_set_palette(void *bm,
+		unsigned int i,
+		unsigned int r,
+		unsigned int g,
+		unsigned int b)
+{
+  tbm_bitmap_t * bms = (tbm_bitmap_t*) bm;
+  if (i<16) {
+    bms->small_palette[i].r = r;
+    bms->small_palette[i].g = g;
+    bms->small_palette[i].b = b;
+  }
+}
+
+void
+tbm_get_palette(void *bm,
+		unsigned int i,
+		unsigned int *r,
+		unsigned int *g,
+		unsigned int *b)
+{
+  tbm_bitmap_t * bms = (tbm_bitmap_t*) bm;
+  if (i<bms->ncolors) {
+    *r =bms->palette[i].r;
+    *g =bms->palette[i].g;
+    *b =bms->palette[i].b;
+  }
+}

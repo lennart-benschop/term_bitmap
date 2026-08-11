@@ -181,7 +181,7 @@ tbm_circle(void *bm, int x, int y, unsigned int r, bool fill)
   bms->cur_y = y;
   old_x = r;
   for (i=0; i<=r; i++) {
-    new_x = sqrt(r*r-i*i);
+    new_x = sqrt((r+0.5)*(r+0.5)-(i+0.5)*(i+0.5));
     if (fill) {
       tbm_moveto(bm,x-new_x,y-i);
       tbm_lineto(bm,x+new_x,y-i);
