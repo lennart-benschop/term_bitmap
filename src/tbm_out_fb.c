@@ -59,7 +59,7 @@ void redraw_fb(tbm_bitmap_t* bms)
     return;
   }
   printf("\033[%d;%dHa\n",bms->posy+1,bms->posx+1); // Do some fb output
-  printf("\033[%d;%dH",bms->posy+1+(bms->height+15)/16,1); // Position on line just after graphics bitmap.
+  printf("\033[%d;%dH\n",bms->posy+1+(bms->height+15)/16,1); // Position on line just after graphics bitmap.
   for (y=0;y<bms->height;y++) {
     for (x=0;x<bms->width;x++) {
       uint8_t c = bms->bitmap[y*bms->width+x];
