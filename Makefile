@@ -1,4 +1,5 @@
-CFLAGS=-O3 -Wall -I ./incl
+FFLAGS=-DUSE_LINUX_FB
+CFLAGS=-O3 -Wall -I ./incl $(FFLAGS)
 
 default: lib tests
 
@@ -8,9 +9,11 @@ libtbm.a: src/tbm_main.o src/tbm_plot.o src/tbm_text.o src/tbm_out_sixel.o src/t
 	$(AR) r $@ src/*.o
 	ranlib libtbm.a
 
-tests: test_simple test_cube test_dodec
+tests: test_simple test_cube test_dodec test_mandel
 
 test_simple: tests/test_simple.o libtbm.a
+	$(CC) -o $@ $^ -L . -ltbm -lm
+test_mandel: tests/test_mandel.o libtbm.a
 	$(CC) -o $@ $^ -L . -ltbm -lm
 test_cube: tests/test_cube.o libtbm.a
 	$(CC) -o $@ $^ -L . -ltbm -lm
@@ -18,5 +21,5 @@ test_dodec: tests/test_dodec.o libtbm.a
 	$(CC) -o $@ $^ -L . -ltbm -lm
 
 clean:
-	rm -f test_cube test_dodec test_simple libtbm.a src/*.o tests/*.o
+	rm -f test_cube test_dodec test_simple test_mandel libtbm.a src/*.o tests/*.o
 

@@ -4,6 +4,8 @@
    There is NO WARRANTY.
 */
 
+#ifdef USE_LINUX_FB
+
 #include "term_bitmap.h"
 #include "tbm_internal.h"
 
@@ -80,3 +82,5 @@ void redraw_fb(tbm_bitmap_t* bms)
 void update_whc_fb(unsigned int *w, unsigned int *h, unsigned int *c)
 {
 }
+
+#endif

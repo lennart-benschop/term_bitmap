@@ -36,9 +36,11 @@ tbm_new_screen(unsigned int width,
     case BITMAP_KITTY:
       update_whc_kitty(&w,&h,&c);
       break;
+#ifdef USE_LINUX_FB
     case BITMAP_FB:
       update_whc_fb(&w,&h,&c);
       break;
+#endif      
     case BITMAP_OCTANT:
       update_whc_octant(&w,&h,&c);
       break;
@@ -96,9 +98,11 @@ tbm_redraw(void *bm)
     case BITMAP_KITTY:
       redraw_kitty(bms);
       break;
-    case BITMAP_FB:
+#ifdef USE_LINUX_FB
+  case BITMAP_FB:
       redraw_fb(bms);
       break;
+#endif      
     case BITMAP_OCTANT:
       redraw_octant(bms);
       break;
