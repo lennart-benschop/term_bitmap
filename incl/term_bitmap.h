@@ -43,6 +43,10 @@
    the true bitmap modes (sixel, kitty, fb) support full colour.
 */
 
+/* Set number of text rows that you want to be unused by the
+   graphics screen. Call this before tbm_get_recommended */
+void tbm_set_unused(unsigned int r);
+
 /* tbm_new_screen
 
    Create a new bitmap screen.

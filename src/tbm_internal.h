@@ -25,9 +25,15 @@ typedef struct {
   palette_t small_palette[16];
 } tbm_bitmap_t;
 
+void tbm_term_setxy(unsigned int x, unsigned int y);
+
+void tbm_term_getxy(unsigned int *x, unsigned int *y);
+
 void set_palette(tbm_bitmap_t* bm);
 
 void redraw_sixel(tbm_bitmap_t* bm);
+
+void probe_sixel(unsigned int *cellheight);
 
 void update_whc_sixel(unsigned int *w, unsigned int *h, unsigned int *c);
 

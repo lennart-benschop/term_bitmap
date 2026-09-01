@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MIN_RL 4
 
@@ -73,4 +74,26 @@ void update_whc_sixel(unsigned int *w, unsigned int *h, unsigned int *c)
 {
   // Force height to be a multiple of 6.
   *h = (*h + 5)/6*6;
+}
+
+void probe_sixel(unsigned int *cellheight)
+{
+  unsigned int oldx,oldy, newx,newy;
+  int i;
+  tbm_term_getxy(&oldx,&oldy);
+  tbm_term_setxy(0,0);
+  // Output an empty sixel bitmap, 40 x 6 pixels tall  
+  printf("\033Pq#0;2;0;0;0#1;1,1,1");
+  for (i=0;i<40;i++)
+    printf("#0A-\n");
+  printf("\033\\\n");
+  tbm_term_getxy(&newx,&newy);
+  newy--;
+  tbm_term_setxy(oldx,oldy);
+  //printf("NewY=%d\n",newy);
+  if (newy==1) {
+    *cellheight = 0;
+  } else {
+    *cellheight = (240+newy-1)/newy;
+  }
 }

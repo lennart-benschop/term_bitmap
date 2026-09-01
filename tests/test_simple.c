@@ -22,6 +22,7 @@ int main(void)
   unsigned int ncolors;
   unsigned int mode;
   void *bm;
+  tbm_set_unused(3);
   tbm_get_recommended(&width, &height, &ncolors, &mode);
   if (ncolors > 16) ncolors = 16;
   bm = tbm_new_screen(width,height,0,0,ncolors,mode);
