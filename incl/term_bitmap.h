@@ -233,6 +233,8 @@ tbm_getparams(void *bm, unsigned int *w, unsigned int *h, unsigned int *c);
       selected.
    - Otherwise, if environment variable TERM has the value 'linux', select
      BITMAP_FB, if it has the value 'xterm-kitty', select BITMAP_KITTY.
+   - Try to draw a sixel bitmap and check if the cursor moves. If so,
+     select BITMAP_SIXEl.
    - Otherwise fall back to BITMAP_SEXTANT.
 
    The actual algorithm will be refined in the future, possible including
@@ -269,3 +271,58 @@ tbm_get_palette(void *bm,
 		unsigned int *r,
 		unsigned int *g,
 		unsigned int *b);
+
+/* tbm_mono_bitmap_put
+
+   Draw a monochrome bitmap onto the screen. 
+   bitmap_p points to bitmap to draw, 1 bit per pixel (8 pixels per byte,
+   leftmost pixel in most significant bit). Each row in the bitmap contains
+   a whole number of bytes (rounded up). A set bit will be drawn in the
+   foreground colour/mode, a clear bit will be drawn in the background
+   colour/mode.
+
+   x, y is the top-left position on the screen where the bitmap will be drawn.
+   xsize, ysize are the width/height of the bitmap to draw. 
+ */
+void tbm_mono_bitmap_put(
+			 void *bm,
+			 uint8_t * bitmap_p,
+			 int x,
+			 int y,
+			 int xsize,
+			 int ysize);
+
+/* tbm_bitmap_put
+
+   Draw abitmap onto the screen. 
+   bitmap_p points to bitmap to draw, 1 byte per pixel. Pixels in the
+   background colour are not drawn if bg_transparent is set.
+
+   x, y is the top-left position on the screen where the bitmap will be drawn.
+   xsize, ysize are the width/height of the bitmap to draw. 
+ */
+void tbm_bitmap_put(
+		    void *bm,
+		    uint8_t * bitmap_p,
+		    int x,
+		    int y,
+		    int xsize,
+		    int ysize,
+		    bool bg_transparent);
+
+/* tbm_bitmap_get
+
+   Read a bitmap from the screen. 
+   bitmap_p points to bitmap to read, 1 byte per pixel 
+
+   x.y is the top-left position on the screen where the bitmap will be drawn.
+   xsize, ysize are the width/height of the bitmap to draw. 
+ */
+void tbm_bitmap_get(
+		    void *bm,
+		    uint8_t * bitmap_p,
+		    int x,
+		    int y,
+		    int xsize,
+		    int ysize);
+

@@ -194,6 +194,94 @@ int main(void)
   while(getchar()!='\n');
 
   tbm_clear(bm);
+  // Draw mono bitmap 
+  {
+    unsigned int i,x,y,c;
+    static uint8_t pattern[] = {
+      0x7f, 0x00,
+      0x80, 0x80,
+      0x80, 0x80,
+      0x80, 0x80,
+      0xff, 0x80,
+      0x80, 0x80,
+      0x80, 0x80,
+      0x80, 0x80,
+      0x00, 0x00,
+    };
+    for (i=0; i<50; i++) {
+      x=randint(width);
+      y=randint(height);
+      c=randint(ncolors-1)+1;
+      tbm_setpen(bm,c,0,DRAW_MODE_FG,DRAW_MODE_INVIS);
+      tbm_mono_bitmap_put(bm,pattern,x,y,9,9);
+    }
+    tbm_redraw(bm);
+  }
+  
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
+
+  tbm_clear(bm);
+  // Move sprite using get/put bitmap 
+  {
+    unsigned int i;
+    int x=-1000;
+    int y=-1000;
+    int xv = 4;
+    int yv = 3;
+    static uint8_t pattern[] = {
+       0,  0,  9,  9,  9,  9,  9,  9,  0,  0,
+       0,  9,  9,  9,  9,  9,  9,  9,  9,  0,
+       9,  9, 15, 15,  9,  9, 15, 15,  9,  9,
+       9,  9, 15, 15,  9,  9, 15, 15,  9,  9, 
+       9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
+       9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
+       9,  9, 11,  9,  9,  9,  9, 11,  9,  9,
+       9,  9,  9, 11, 11, 11, 11,  9,  9,  9,
+       0,  9,  9,  9, 11, 11,  9,  9,  9,  0,
+       0,  0,  9,  9,  9,  9,  9,  9,  0,  0,
+     
+    };
+    static uint8_t saved_bg[100];
+    tbm_setpen(bm,2,0,DRAW_MODE_FG,DRAW_MODE_INVIS);
+    // Draw background, horizontal and vertical lines.
+    for (i=0;i<width;i+=10) {
+      tbm_moveto(bm,i,0);
+      tbm_lineto(bm,i,height-1);
+    }
+    for (i=0;i<height;i+=10) {
+      tbm_moveto(bm,0,i);
+      tbm_lineto(bm,width-1,i);
+    }
+    // Mainloop to draw frames
+    for (i=0; i<1000; i++) {
+      if (x==-1000) {
+	x=0;y=0;
+      } else {
+	tbm_bitmap_put(bm,saved_bg,x,y,10,10,false); // restore old bg.
+	if (xv>0 && x>=width-10) {
+	  xv = -xv;
+	} else if (xv < 0 && x<=0) {
+	  xv = - xv;
+	}
+	if (yv>0 && y>=height-10) {
+	  yv = -yv;
+	} else if (yv < 0 && y<=0) {
+	  yv = - yv;
+	}
+	x+=xv;
+	y+=yv;
+      }
+      tbm_bitmap_get(bm,saved_bg,x,y,10,10);		      
+      tbm_bitmap_put(bm,pattern,x,y,10,10,true);
+      usleep(20000);
+      tbm_redraw(bm);
+    }
+  }
+  
+  printf("Press ENTER to continue\n");
+  while(getchar()!='\n');
+  tbm_clear(bm);
   // My favourite xor-lines pattern.
   tbm_setpen(bm,15,0,DRAW_MODE_INVERT,DRAW_MODE_INVIS);
   {
